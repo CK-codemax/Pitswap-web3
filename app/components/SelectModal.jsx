@@ -12,10 +12,10 @@ import { FaRegCircleQuestion } from "react-icons/fa6";
 import { FaLongArrowAltDown } from "react-icons/fa";
 
 const options = [
-    {logo : '/bnb.png', name : 'bnb',},
-    {logo : '/bnb.png', name : 'btc',},
-    {logo : '/bnb.png', name : 'busd',},
-    {logo : '/bnb.png', name : 'cake',},
+    {logo : '/binance.png', name : 'bnb',},
+    {logo : '/btc.png', name : 'btc',},
+    {logo : '/cake.png', name : 'busd',},
+    {logo : '/cake.png', name : 'cake',},
     {logo : '/bnb.png', name : 'dai',},
     {logo : '/bnb.png', name : 'eth',},
     {logo : '/bnb.png', name : 'hyper',},
@@ -76,9 +76,9 @@ function Window(){
     [closeModal]
   )
 
-  function handleChangeCur(name){
-    if(name === from || name === to)return;
-    changeCur(name);
+  function handleChangeCur(type){
+    if(type.name === from.name || type.name === to.name)return;
+    changeCur(type);
     closeModal();
   }
 
@@ -106,10 +106,10 @@ function Window(){
             </div>
 
             <div className="overflow-hidden pl-4">
-                <div className="flex flex-col space-y-6 h-[300px] overflow-y-scroll">
-                    {options.map((type => <div onClick={() => handleChangeCur(type.name)} className="flex items-center space-x-3 cursor-pointer" key={type.name}>
+                <div className="flex flex-col space-y-6 h-[300px] overflow-y-scroll pb-8">
+                    {options.map((type => <div onClick={() => handleChangeCur(type)} className={`flex items-center ${from.name === type.name || to.name === type.name ? 'opacity-[50%]' : 'opacity-100'} space-x-3 cursor-pointer`} key={type.name}>
                         <img className="w-[35px] h-auto object-cover" src={type.logo} alt="logo" />
-                        <p className={`font-bold text-base uppercase ${from === type.name || to === type.name ? 'text-gray-600' : 'text-white'}`}>{type.name}</p>
+                        <p className={`font-bold text-base uppercase text-white`}>{type.name}</p>
                     </div>))}
                 </div>
 
