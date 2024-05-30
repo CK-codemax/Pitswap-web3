@@ -12,6 +12,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { SiBinance } from "react-icons/si";
 import { FaChevronDown } from "react-icons/fa6";
 import QuestionModal from "./QuestionModal";
+import SelectModal from "./SelectModal";
 
 export default function Main() {
   return (
@@ -40,7 +41,9 @@ export default function Main() {
        <p className="text-xs font-semibold text-gray-200">Input</p>
         <div className="w-full flex justify-between pr-2">
             <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[50%] text-2xl" />
-            <div className="flex space-x-2 items-center cursor-pointer">
+            <SelectModal>
+                <SelectModal.Open>
+                <div className="flex space-x-2 items-center cursor-pointer">
                 <div className="bg-yellow-500 rounded-full p-2">
                     <SiBinance className="text-black" />
                 </div>
@@ -49,6 +52,9 @@ export default function Main() {
 
 
             </div>
+                </SelectModal.Open>
+                <SelectModal.Window />
+            </SelectModal>
 
         </div>
    </div>
