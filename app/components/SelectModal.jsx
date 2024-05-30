@@ -87,7 +87,7 @@ function Window(){
     if(!isOpen)return null
     return createPortal(
     
-        <div ref={windowRef}  className="fixed w-[90%] sm:w-[70%] lg:w-[400px] overflow-hidden top-[50%] pt-6 bg-gray-800 border-black border shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl left-[50%] -translate-x-[50%] -translate-y-[50%]">
+        <div ref={windowRef}  className="fixed w-[90%] z-50 sm:w-[70%] lg:w-[400px] overflow-hidden top-[50%] pt-6 bg-gray-800 border-black border shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl left-[50%] -translate-x-[50%] -translate-y-[50%]">
             <div className=" w-full flex text-white justify-between items-center px-4">
                <div className="flex items-center space-x-2">
                <p className="font-semibold text-left  py-2 text-md cursor-pointer">Select a token</p>

@@ -14,6 +14,7 @@ import { FaChevronDown } from "react-icons/fa6";
 import QuestionModal from "./QuestionModal";
 import SelectModal from "./SelectModal";
 import { useState } from "react";
+import LiquidityModal from "./LiquidityModal";
 
 export default function Main() {
     const [fromCur, setFromCur] = useState({name : 'bnb', logo : '/binance.png'});
@@ -108,10 +109,14 @@ export default function Main() {
         {
             active === 'pool' && (
                 <>
-                    <button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700 ">
-                        Add Liquidity
-                    </button>
-
+                   <LiquidityModal from={fromCur} to={toCur} changeCur={setFromCur} >
+                        <LiquidityModal.Open>
+                            <div className="w-full flex items-center justify-center text-center mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700 ">
+                                Add Liquidity
+                            </div>
+                        </LiquidityModal.Open>
+                        <LiquidityModal.Window/>
+                   </LiquidityModal>
                     <div className="flex justify-between items-center text-white font-semibold">
                          <p>Your Liquidity</p>
                          <FaRegCircleQuestion className="text-[16px] text-gray-400" />
