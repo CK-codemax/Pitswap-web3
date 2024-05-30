@@ -79,6 +79,7 @@ function Window(){
   function handleChangeCur(name){
     if(name === from || name === to)return;
     changeCur(name);
+    closeModal();
   }
 
 
