@@ -29,14 +29,14 @@ const options = [
 
 const ModalContext = createContext();
 
-function SelectModal({ children }) {
+function SelectModal({ children, from, changeCur, to }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => setIsOpen(false);
   const openModal = () => setIsOpen(true);
 
   return (
-    <ModalContext.Provider value={{closeModal, openModal, isOpen }}>
+    <ModalContext.Provider value={{closeModal, openModal, isOpen, from, changeCur, to }}>
       {children}
     </ModalContext.Provider>
   );
@@ -57,7 +57,7 @@ function Window(){
      return () => setMounted(false)
   }, [])
 
-  const { closeModal, isOpen } = useContext(ModalContext);
+  const { closeModal, isOpen, from, changeCur, to } = useContext(ModalContext);
   const windowRef = useRef()
  
 
@@ -75,6 +75,11 @@ function Window(){
     },
     [closeModal]
   )
+
+  function handleChangeCur(name){
+    if(name === from || name === to)return;
+    changeCur(name);
+  }
 
 
     if(!mounted)return
@@ -96,14 +101,14 @@ function Window(){
 
             <div className="flex items-center justify-between px-4 text-white">
                 <p className="font-semibold text-xs">Token name</p>
-                <FaLongArrowAltDown className="text-[12px]" />
+                <FaLongArrowAltDown className="text-[12px] cursor-pointer" />
             </div>
 
             <div className="overflow-hidden pl-4">
                 <div className="flex flex-col space-y-6 h-[300px] overflow-y-scroll">
-                    {options.map((type => <div className="flex items-center space-x-3 cursor-pointer" key={type.name}>
+                    {options.map((type => <div onClick={() => handleChangeCur(type.name)} className="flex items-center space-x-3 cursor-pointer" key={type.name}>
                         <img className="w-[35px] h-auto object-cover" src={type.logo} alt="logo" />
-                        <p className="font-bold text-base uppercase text-white">{type.name}</p>
+                        <p className={`font-bold text-base uppercase ${from === type.name || to === type.name ? 'text-gray-600' : 'text-white'}`}>{type.name}</p>
                     </div>))}
                 </div>
 

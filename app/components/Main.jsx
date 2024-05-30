@@ -13,8 +13,11 @@ import { SiBinance } from "react-icons/si";
 import { FaChevronDown } from "react-icons/fa6";
 import QuestionModal from "./QuestionModal";
 import SelectModal from "./SelectModal";
+import { useState } from "react";
 
 export default function Main() {
+    const [fromCur, setFromCur] = useState('bnb');
+    const [toCur, setToCur] = useState('pit');
   return (
    
     <form  className="fixed w-[90%] sm:w-[70%] lg:w-[400px] top-[50%] py-6 bg-gray-700/60 border-black border p-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl left-[50%] -translate-x-[50%] -translate-y-[50%]">
@@ -41,13 +44,13 @@ export default function Main() {
        <p className="text-xs font-semibold text-gray-200">Input</p>
         <div className="w-full flex justify-between pr-2">
             <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[50%] text-2xl" />
-            <SelectModal>
+            <SelectModal from={fromCur} to={toCur} changeCur={setFromCur}>
                 <SelectModal.Open>
                 <div className="flex space-x-2 items-center cursor-pointer">
                 <div className="bg-yellow-500 rounded-full p-2">
                     <SiBinance className="text-black" />
                 </div>
-                <p className="font-bold text-xl uppercase">bnb</p>
+                <p className="font-bold text-xl uppercase">{fromCur}</p>
                 <FaChevronDown />
 
 
@@ -63,7 +66,9 @@ export default function Main() {
        <p className="text-xs font-semibold text-gray-200">Input</p>
         <div className="w-full flex justify-between pr-2">
             <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[50%] text-2xl" />
-            <div className="flex space-x-2 items-center cursor-pointer bg-purple-800 rounded-xl p-1 px-3">
+           <SelectModal from={toCur} to={fromCur} changeCur={setToCur}>
+                <SelectModal.Open>
+                <div className="flex space-x-2 items-center cursor-pointer bg-purple-800 rounded-xl p-1 px-3">
                 <p className="text-nowrap text-white font-semibold text-md">
                    Select a currency
                 </p>
@@ -71,6 +76,9 @@ export default function Main() {
 
 
             </div>
+                </SelectModal.Open>
+                <SelectModal.Window />
+           </SelectModal>
 
         </div>
    </div>
