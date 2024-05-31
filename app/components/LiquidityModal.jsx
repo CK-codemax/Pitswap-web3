@@ -45,11 +45,11 @@ function Window(){
     return createPortal(
     
        
-    <form  className="fixed w-[90%] sm:w-[70%] lg:w-[400px] top-[50%] min-h-[450px] py-6 border-black border p-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#2b233f]">
-       <div className="fixed top-4 w-full flex text-gray-400 jusify-evenly items-center pb-2">
+    <form  className="fixed w-[90%] sm:w-[400px] top-[350px] min-h-[450px] py-3 border-black border p-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#2b233f]">
+       <div className="w-full flex text-gray-400 jusify-evenly items-center">
             <FaArrowLeft onClick={closeModal} className="text-[16px] cursor-pointer" />
-            <p  className="font-bold cursor-pointer text-center capitalize w-full mx-auto  py-2 sm:text-xl">Add Liquidity</p>
-            <FaRegCircleQuestion className="text-[16px] text-gray-400 fixed right-9" />
+            <p  className="font-bold cursor-pointer text-center capitalize flex-grow  py-2 sm:text-xl">Add Liquidity</p>
+            <FaRegCircleQuestion className="text-[16px] text-gray-400" />
         </div>
          <div className="rounded-2xl bg-[#191326] flex flex-col items-start px-4 space-y-3 py-2 text-white h-[80px]">
          <p className="text-xs font-semibold text-gray-200">Input</p>
@@ -71,12 +71,12 @@ function Window(){
      <p className="text-center text-xl text-white">+</p>
      <div className="rounded-2xl bg-[#191326] flex flex-col items-start px-4 space-y-3 py-2 text-white h-[80px]">
          <p className="text-xs font-semibold text-gray-200">Input</p>
-          <div className="w-full flex justify-between pr-2">
-              <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[50%] text-2xl" />
+          <div className="w-full flex justify-between">
+              <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[20%] text-2xl" />
              <SelectModal from={to} to={from} changeCur={changeCur}>
                   <SelectModal.Open>
-                  <div className="flex space-x-2 items-center cursor-pointer bg-purple-800 rounded-xl p-1 px-3">
-                  <p className="text-nowrap text-white font-semibold text-md">
+                  <div className="flex space-x-1 items-center cursor-pointer bg-purple-800 rounded-xl p-2 px-3">
+                  <p className="text-nowrap text-white font-semibold text-sm sm:text-md">
                      Select a currency
                   </p>
                   <FaChevronDown className="text-white" />

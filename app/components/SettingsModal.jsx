@@ -77,8 +77,8 @@ function Window(){
                 <p className="flex items-center justify-center text-white text-xs font-semibold cursor-pointer min-w-[50px] h-[35px] transition-all duration-150 ease-in-out hover:border-gray-100 rounded-full bg-transparent border border-gray-300">0.1%</p>
                 <p className="flex items-center justify-center text-white text-xs font-semibold cursor-pointer min-w-[50px] h-[35px] transition-all duration-150 ease-in-out hover:border-gray-100 rounded-full bg-transparent border border-gray-300">0.5%</p>
                 <p className="flex items-center justify-center text-white text-xs font-semibold cursor-pointer min-w-[50px] h-[35px] transition-all duration-150 ease-in-out hover:border-gray-100 rounded-full bg-transparent border border-gray-300">1%</p>
-                <div className="flex flex-grow pl-20 border w-[100px] h-[35px] rounded-full border-purple-600 hover:border-gray-300 transition ease-in-out duration-150">
-                    <input type="text" className="outline-none border-none bg-transparent text-white placeholder:text-gray-400" placeholder="0.10%" />
+                <div className="flex flex-grow pl-8 sm:pl-20 border w-[100px] h-[35px] rounded-full border-purple-600 hover:border-gray-300 transition ease-in-out duration-150">
+                    <input type="text" className="outline-none w-full border-none bg-transparent text-white placeholder:text-gray-400" placeholder="0.10%" />
                 </div>
             </div>
 
