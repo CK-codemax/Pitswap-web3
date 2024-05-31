@@ -5,6 +5,13 @@
 @layer components{
      .parent{
        /* background-image: url('/background.jpg'); */
-       background-image: url('https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcm0zODAtMDcta255Z2FwNmouanBn.jpg');
+       background-image: url('/bg2.jpg');
+       background-position: center center;
+       background-size: auto;
+       height: 100vh
+     }
+
+     .main-bg{
+      background-color: #2b233f;
      }
  } 

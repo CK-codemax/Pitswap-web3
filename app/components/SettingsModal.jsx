@@ -63,7 +63,7 @@ function Window(){
     if(!isOpen)return null
     return createPortal(
       
-        <div ref={windowRef}  className="fixed w-[90%] sm:w-[70%] lg:w-[350px] top-24 right-12 pb-6 bg-gray-800 border-black border py-2 px-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl ">
+        <div ref={windowRef}  className="fixed w-[90%] sm:w-[350px] top-36 sm:top-24 right-3 sm:right-12 pb-6 bg-[#2b233f] border-black border py-2 px-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl ">
             <div className=" w-full flex flex-col text-white px-2">
                 <div className="flex space-x-1 items-center">
 

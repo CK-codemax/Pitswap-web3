@@ -23,12 +23,12 @@ export default function Main() {
 
   return (
    
-    <form  className="fixed w-[90%] sm:w-[70%] lg:w-[400px] top-[50%] min-h-[450px] py-6 bg-gray-700/60 border-black border p-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl left-[50%] -translate-x-[50%] -translate-y-[50%]">
+    <form onSubmit={(e) => e.preventDefault()}  className="fixed w-[90%] sm:w-[400px] top-[350px] min-h-[450px] py-6 border-black border p-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#2b233fb3]">
         <div className="fixed top-4 w-full flex text-gray-400 justify-between items-center pb-2">
             {/* <FaArrowLeft className="text-[16px]" /> */}
-            <p onClick={() => setActive('swap')} className={`font-bold cursor-pointer text-center ${active === 'swap' && 'text-white'} capitalize w-full mx-auto  py-2 sm:text-xl`}>Swap</p>
-            <p onClick={() => setActive('fiat')} className={`font-bold cursor-pointer text-center ${active === 'fiat' && 'text-white'} capitalize w-full mx-auto  py-2 sm:text-xl`}>Fiat</p>
-            <p onClick={() => setActive('pool')} className={`font-bold cursor-pointer text-center ${active === 'pool' && 'text-white'} capitalize w-full mx-auto  py-2 sm:text-xl`}>Pool</p>
+            <p onClick={() => setActive('swap')} className={`font-bold cursor-pointer hover:text-white text-center ${active === 'swap' && 'text-white'} capitalize w-full mx-auto  py-2 sm:text-xl`}>Swap</p>
+            <p onClick={() => setActive('fiat')} className={`font-bold cursor-pointer hover:text-white text-center ${active === 'fiat' && 'text-white'} capitalize w-full mx-auto  py-2 sm:text-xl`}>Fiat</p>
+            <p onClick={() => setActive('pool')} className={`font-bold cursor-pointer hover:text-white text-center ${active === 'pool' && 'text-white'} capitalize w-full mx-auto  py-2 sm:text-xl`}>Pool</p>
             {/* <QuestionModal>
                 <QuestionModal.Open>
                     <FaRegCircleQuestion className="text-[16px]" />
@@ -46,7 +46,7 @@ export default function Main() {
 
         {active === 'swap' && (
             <>
-             <div className="rounded-2xl bg-gray-900 flex flex-col items-start px-4 space-y-3 py-2 text-white h-[80px]">
+             <div className="rounded-2xl bg-[#191326] flex flex-col items-start px-4 space-y-3 py-2 text-white h-[80px]">
              <p className="text-xs font-semibold text-gray-200">Input</p>
               <div className="w-full flex justify-between pr-2">
                   <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[50%] text-2xl" />
@@ -64,7 +64,7 @@ export default function Main() {
               </div>
          </div>
          <p className="text-center text-xl text-white">+</p>
-         <div className="rounded-2xl bg-gray-900 flex flex-col items-start px-4 space-y-3 py-2 text-white h-[80px]">
+         <div className="rounded-2xl bg-[#191326] flex flex-col items-start px-4 space-y-3 py-2 text-white h-[80px]">
              <p className="text-xs font-semibold text-gray-200">Input</p>
               <div className="w-full flex justify-between pr-2">
                   <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[50%] text-2xl" />
@@ -111,9 +111,9 @@ export default function Main() {
                 <>
                    <LiquidityModal from={fromCur} to={toCur} changeCur={setFromCur} >
                         <LiquidityModal.Open>
-                            <div className="w-full flex items-center justify-center text-center mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700 ">
+                            <button className="w-full flex items-center justify-center text-center mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700 ">
                                 Add Liquidity
-                            </div>
+                            </button>
                         </LiquidityModal.Open>
                         <LiquidityModal.Window/>
                    </LiquidityModal>

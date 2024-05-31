@@ -66,7 +66,7 @@ function Window(){
     if(!mounted)return
     if(!isOpen)return null
     return createPortal(
-        <div ref={windowRef}  className="fixed w-[90%] sm:w-[70%] lg:w-[200px] top-24 right-3 bg-gray-700 border-black border py-4 px-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl">
+        <div ref={windowRef}  className="fixed w-[200px] top-36 sm:top-24 right-3 sm:right-8 bg-gray-700 border-black border py-4 px-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl">
             <div className="cursor-pointer text-gray-300 hover:text-white transition-all duration-150 ease-in-out flex space-x-3 items-center">
                 <CiHome className="text-[24px]" />
                 <p className="font-semibold">Website</p>

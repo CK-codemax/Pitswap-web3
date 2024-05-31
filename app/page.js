@@ -3,7 +3,7 @@ import Main from "./components/Main";
 
 export default function page() {
   return (
-    <div className="bg-gray-800 w-full h-screen parent">
+    <div className="w-full min-h-screen overflow-y-scroll parent">
       <Header />
       <Main />
     </div>

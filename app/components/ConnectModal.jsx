@@ -62,7 +62,7 @@ function Window(){
     if(!isOpen)return null
     return createPortal(
     
-        <div ref={windowRef}  className="fixed w-[90%] sm:w-[70%] lg:w-[400px] min-h-[450px] top-[50%] py-6 bg-gray-800 border-black border px-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl left-[50%] -translate-x-[50%] -translate-y-[50%]">
+        <div ref={windowRef}  className="fixed w-[90%] sm:w-[400px] min-h-[450px] top-[350px] py-6 bg-[#2b233f] border-black border px-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl left-[50%] -translate-x-[50%] -translate-y-[50%]">
             <div className=" w-full flex text-white justify-between items-center px-2">
                 <p className="font-semibold text-left  py-2 text-md cursor-pointer">Connect a wallet</p>
                 <div onClick={closeModal} className="w-[50px] h-[50px] bg-transparent hover:bg-gray-700 active:bg-gray-700  cursor-pointer transition-colors duration-300 ease-in-out rounded-full flex items-center justify-center">
