@@ -7,6 +7,7 @@ import { HiXMark } from "react-icons/hi2";
 import { AiOutlinePicture } from "react-icons/ai";
 import { FaEllipsis, FaRegCircleQuestion } from "react-icons/fa6";
 
+import { FaLongArrowAltDown } from "react-icons/fa";
 
 import { FaArrowLeft } from "react-icons/fa";
 import { SiBinance } from "react-icons/si";
@@ -63,7 +64,9 @@ export default function Main() {
       
               </div>
          </div>
-         <p className="text-center text-xl text-white">+</p>
+      <div className="w-full flex justify-center">
+      <FaLongArrowAltDown className="text-purple-500 cursor-pointer text-[16px]" />
+      </div>
          <div className="rounded-2xl bg-[#191326] flex flex-col items-start px-4 space-y-3 py-2 text-white h-[80px]">
              <p className="text-xs font-semibold text-gray-200">Input</p>
               <div className="w-full flex justify-between pr-2">
