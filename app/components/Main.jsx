@@ -18,8 +18,8 @@ import { useState } from "react";
 import LiquidityModal from "./LiquidityModal";
 
 export default function Main() {
-    const [fromCur, setFromCur] = useState({name : 'bnb', logo : '/binance.png'});
-    const [toCur, setToCur] = useState({name : 'pit', logo : '/binance.png'});
+    const [fromCur, setFromCur] = useState({name : 'bnb', logo : '/bnb-real.png'});
+    const [toCur, setToCur] = useState({name : 'pit', logo : '/pit-real.png'});
     const [active, setActive] = useState('swap');
 
   return (

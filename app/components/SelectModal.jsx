@@ -12,19 +12,19 @@ import { FaRegCircleQuestion } from "react-icons/fa6";
 import { FaLongArrowAltDown } from "react-icons/fa";
 
 const options = [
-    {logo : '/binance.png', name : 'bnb',},
-    {logo : '/btc.png', name : 'btc',},
-    {logo : '/cake.png', name : 'busd',},
-    {logo : '/cake.png', name : 'cake',},
-    {logo : '/bnb.png', name : 'dai',},
-    {logo : '/bnb.png', name : 'eth',},
-    {logo : '/bnb.png', name : 'hyper',},
-    {logo : '/bnb.png', name : 'pig',},
-    {logo : '/bnb.png', name : 'pit',},
-    {logo : '/bnb.png', name : 'saferune',},
-    {logo : '/bnb.png', name : 'usdc',},
-    {logo : '/bnb.png', name : 'usdt',},
-    {logo : '/bnb.png', name : 'wbnb',},
+    {logo : '/bnb-real.png', name : 'bnb',},
+    {logo : '/btc-real.png', name : 'btc',},
+    {logo : '/busd-real.png', name : 'busd',},
+    {logo : '/cake-real.png', name : 'cake',},
+    {logo : '/dai-real.png', name : 'dai',},
+    {logo : '/eth-real.png', name : 'eth',},
+    {logo : '/hyper-real.png', name : 'hyper',},
+    {logo : '/pig-real.png', name : 'pig',},
+    {logo : '/pit-real.png', name : 'pit',},
+    {logo : '/saferune-real.png', name : 'saferune',},
+    {logo : '/usdc-real.png', name : 'usdc',},
+    {logo : '/usdt-real.png', name : 'usdt',},
+    {logo : '/wbnb-real.png', name : 'wbnb',},
 ];
 
 const ModalContext = createContext();

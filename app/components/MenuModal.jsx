@@ -67,23 +67,26 @@ function Window(){
     if(!isOpen)return null
     return createPortal(
         <div ref={windowRef}  className="fixed w-[200px] top-36 sm:top-24 right-3 sm:right-8 bg-gray-700 border-black border py-4 px-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl">
-            <div className="cursor-pointer text-gray-300 hover:text-white transition-all duration-150 ease-in-out flex space-x-3 items-center">
+                <a className="cursor-pointer text-gray-300 hover:text-white transition-all duration-150 ease-in-out flex space-x-3 items-center font-semibold" href='https://www.pitbull.community/' target="_blank" rel="noopener noreferrer">
                 <CiHome className="text-[24px]" />
-                <p className="font-semibold">Website</p>
-            </div>
-            <div className="cursor-pointer text-gray-300 hover:text-white transition-all duration-150 ease-in-out flex space-x-3 items-center">
-                <BiMessageRounded className="text-[24px]" />
-                <p className="font-semibold">Telegram</p>
-            </div>
-            <div className="cursor-pointer text-gray-300 hover:text-white transition-all duration-150 ease-in-out flex space-x-3 items-center">
+                  <span>Website</span>
+                  </a>
+           
+                <a className="cursor-pointer text-gray-300 hover:text-white transition-all duration-150 ease-in-out flex space-x-3 items-center font-semibold" href='https://t.me/Pitbull_BSC' target="_blank" rel="noopener noreferrer">
+                <BiMessageRounded  className="text-[24px]" />
+                  <span>Telegram</span>
+                  </a>
+           
+                <a className="cursor-pointer text-gray-300 hover:text-white transition-all duration-150 ease-in-out flex space-x-3 items-center font-semibold" href='https://twitter.com/BscPitbull' target="_blank" rel="noopener noreferrer">
                 <CiTwitter className="text-[24px]" />
-                <p className="font-semibold">Twitter</p>
-            </div>
-            <div className="cursor-pointer text-gray-300 hover:text-white transition-all duration-150 ease-in-out flex space-x-3 items-center">
+                  <span>Twitter</span>
+                  </a>
+           
+                <a className="cursor-pointer text-gray-300 hover:text-white transition-all duration-150 ease-in-out flex space-x-3 items-center font-semibold" href='https://github.com/pitbullBSC/pitbull.sol' target="_blank" rel="noopener noreferrer">
                 <FaCode className="text-[24px]" />
-                <p className="font-semibold">Code</p>
-            </div>
-            
+                  <span>Code</span>
+                  </a>
+           
         </div>,
       document.body
     )
