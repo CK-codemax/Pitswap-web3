@@ -1,5 +1,8 @@
 'use client'
 
+import tokenList from "../../tokenList.json"
+
+
 import { BsGlobeEuropeAfrica } from "react-icons/bs";
 import { CiFaceSmile, CiLocationOn, CiUser } from "react-icons/ci";
 import { GoChevronDown, GoPlus } from "react-icons/go";
@@ -8,19 +11,89 @@ import { AiOutlinePicture } from "react-icons/ai";
 import { FaEllipsis, FaRegCircleQuestion } from "react-icons/fa6";
 
 import { FaLongArrowAltDown } from "react-icons/fa";
+import { AiOutlineRetweet } from "react-icons/ai";
 
 import { FaArrowLeft } from "react-icons/fa";
 import { SiBinance } from "react-icons/si";
 import { FaChevronDown } from "react-icons/fa6";
 import QuestionModal from "./QuestionModal";
 import SelectModal from "./SelectModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LiquidityModal from "./LiquidityModal";
+// import { fetchPrices } from "../utils/fetchCurrency";
+import axios from "axios";
+import ConnectModal from "./ConnectModal";
 
-export default function Main() {
-    const [fromCur, setFromCur] = useState({name : 'bnb', logo : '/bnb-real.png'});
-    const [toCur, setToCur] = useState({name : 'pit', logo : '/pit-real.png'});
+export default function Main({isConnected, address, connect}) {
+    const [fromCur, setFromCur] = useState(tokenList[0]);
+    const [toCur, setToCur] = useState(tokenList[1]);
     const [active, setActive] = useState('swap');
+    const [prices, setPrices] = useState(null);
+    const [tokenOneAmount, setTokenOneAmount] = useState('');
+    const [tokenTwoAmount, setTokenTwoAmount] = useState('');
+    const [invert, setInvert] = useState(false);
+
+    async function fetchPrices(one, two){
+        const res = await axios.get('/api/getPrice', {
+            params : {
+                addressOne : one,
+                addressTwo : two,
+            }
+        });
+    
+        console.log(res.data);
+        setPrices(res.data);
+    }
+
+    function switchCurrencies(){
+        setPrices(null);
+        setTokenOneAmount('');
+        setTokenTwoAmount('');
+
+        const one = fromCur;
+        const two = toCur;
+
+        setFromCur(two);
+        setToCur(one);
+
+        fetchPrices(two.address, one.address);
+    }
+
+    function changeAmount(e) {
+        setTokenOneAmount(e.target.value);
+        if(e.target.value && prices){
+          setTokenTwoAmount((e.target.value * prices.ratio).toFixed(2))
+        }else{
+          setTokenTwoAmount(null);
+        }
+      }
+
+      function changeCurOne(type){
+        if(type.ticker === fromCur.ticker || type.ticker === toCur.ticker)return;
+        setPrices(null);
+        setTokenOneAmount('');
+        setTokenTwoAmount('');
+        
+        setFromCur(type);
+        fetchPrices(type.address, toCur.address)
+    }
+    
+    function changeCurTwo(type){
+          if(type.ticker === fromCur.ticker || type.ticker === toCur.ticker)return;
+        setPrices(null);
+        setTokenOneAmount('');
+        setTokenTwoAmount('');
+    
+        setToCur(type);
+        fetchPrices(fromCur.address, type.address)
+      }
+    
+
+  
+
+    useEffect(() => {
+        fetchPrices(tokenList[0].address, tokenList[1].address)
+    }, [])
 
   return (
    
@@ -30,19 +103,7 @@ export default function Main() {
             <p onClick={() => setActive('swap')} className={`cursor-pointer hover:text-white text-center ${active === 'swap' && 'text-white font-bold'} capitalize w-full mx-auto  py-2 sm:text-xl`}>Swap</p>
             <p onClick={() => setActive('fiat')} className={`cursor-pointer hover:text-white text-center ${active === 'fiat' && 'text-white font-bold'} capitalize w-full mx-auto  py-2 sm:text-xl`}>Fiat</p>
             <p onClick={() => setActive('pool')} className={`cursor-pointer hover:text-white text-center ${active === 'pool' && 'text-white font-bold'} capitalize w-full mx-auto  py-2 sm:text-xl`}>Pool</p>
-            {/* <QuestionModal>
-                <QuestionModal.Open>
-                    <FaRegCircleQuestion className="text-[16px]" />
-                </QuestionModal.Open>
-                <QuestionModal.Window>
-                <div className="fixed top-10 left-10 p-4 rounded-xl w-[250px] bg-gray-700">
-                        <p className="w-full text-white">
-                            When you add liquidity, you are given pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time.
-                        </p>
-                    </div>
-                </QuestionModal.Window>
-                   
-            </QuestionModal> */}
+           
         </div>
 
         {active === 'swap' && (
@@ -50,12 +111,13 @@ export default function Main() {
              <div className="rounded-2xl bg-[#191326] flex flex-col items-start px-4 space-y-3 py-2 text-white h-[80px]">
              <p className="text-xs font-semibold text-gray-200">Input</p>
               <div className="w-full flex justify-between pr-2">
-                  <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[50%] text-2xl" />
-                  <SelectModal from={fromCur} to={toCur} changeCur={setFromCur}>
+                  <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[50%] text-2xl" value={tokenOneAmount} onChange={changeAmount}
+            disabled={!prices}/>
+                  <SelectModal from={fromCur} to={toCur} changeCur={changeCurOne}>
                       <SelectModal.Open>
                       <div className="flex space-x-2 items-center cursor-pointer">
-                      <img className="w-[35px] h-auto object-cover" src={fromCur.logo} alt="logo" />
-                        <p className={`font-bold text-base uppercase text-white`}>{fromCur.name}</p>
+                      <img className="w-[35px] h-auto object-cover" src={fromCur.img} alt="logo" />
+                        <p className={`font-bold text-base uppercase text-white`}>{fromCur.ticker}</p>
                       <FaChevronDown />
                   </div>
                       </SelectModal.Open>
@@ -65,25 +127,17 @@ export default function Main() {
               </div>
          </div>
       <div className="w-full flex justify-center">
-      <FaLongArrowAltDown className="text-purple-500 cursor-pointer text-[16px]" />
+      <FaLongArrowAltDown className="text-purple-500 cursor-pointer text-[16px]" onClick={switchCurrencies}/>
       </div>
          <div className="rounded-2xl bg-[#191326] flex flex-col items-start px-4 space-y-3 py-2 text-white h-[80px]">
              <p className="text-xs font-semibold text-gray-200">Input</p>
               <div className="w-full flex justify-between pr-2">
-                  <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[50%] text-2xl" />
-                 <SelectModal from={toCur} to={fromCur} changeCur={setToCur}>
+                  <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[50%] text-2xl" value={tokenTwoAmount} disabled={true}/>
+                 <SelectModal from={toCur} to={fromCur}  changeCur={changeCurTwo}>
                       <SelectModal.Open>
-                      {/* <div className="flex space-x-2 items-center cursor-pointer bg-purple-800 rounded-xl p-1 px-3">
-                      <p className="text-nowrap text-white font-semibold text-md">
-                         Select a currency
-                      </p>
-                      <FaChevronDown className="text-white" />
-      
-      
-                  </div> */}
                             <div className="flex space-x-2 items-center cursor-pointer">
-                      <img className="w-[35px] h-auto object-cover" src={toCur.logo} alt="logo" />
-                        <p className={`font-bold text-base uppercase text-white`}>{toCur.name}</p>
+                      <img className="w-[35px] h-auto object-cover" src={toCur.img} alt="logo" />
+                        <p className={`font-bold text-base uppercase text-white`}>{toCur.ticker}</p>
                       <FaChevronDown />
                   </div>
                       </SelectModal.Open>
@@ -93,15 +147,26 @@ export default function Main() {
               </div>
          </div>
 
+         {prices && <div className="flex justify-between items-center text-gray-400 text-xs font-semibold">
+            <p>Price</p>
+            <div className="flex flex-grow justify-end space-x-3 items-center">
+                 <p className="flex-grow text-right">{!invert ? `${prices.ratio} ${fromCur.ticker} per ${toCur.ticker}` : `${1 / prices.ratio} ${toCur.ticker} per ${fromCur.ticker}`}</p>
+                 <div onClick={() => setInvert((init) => !init)} className="p-2 rounded-full cursor-pointer bg-gray-600">
+                    <AiOutlineRetweet className="text-[16px] text-white" />
+                 </div>
+            </div>
+         </div>}
+
          <div className="flex justify-between items-center text-gray-400 text-xs font-semibold">
             <p>Slippage tolerance</p>
             <p>6%</p>
          </div>
       
       
-         <button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700 ">
-           Connect wallet
-         </button>
+
+            <div className="w-full flex items-center justify-center">
+                <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label="Connect to a wallet" />
+            </div>
          </>
         )}
 
@@ -112,7 +177,7 @@ export default function Main() {
         {
             active === 'pool' && (
                 <>
-                   <LiquidityModal from={fromCur} to={toCur} changeCur={setFromCur} >
+                   <LiquidityModal from={fromCur} to={toCur} setFromCur={setFromCur} setToCur={setToCur} prices={prices} setPrices={setPrices} fetchPrices={fetchPrices}>
                         <LiquidityModal.Open>
                             <button className="w-full flex items-center justify-center text-center mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700 ">
                                 Add Liquidity

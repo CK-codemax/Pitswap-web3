@@ -12,14 +12,14 @@ import SelectModal from "./SelectModal";
 
 const ModalContext = createContext();
 
-function LiquidityModal({ children, from, to, changeCur }) {
+function LiquidityModal({ children, from, to, setFromCur, setToCur, prices, setPrices, fetchPrices }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => setIsOpen(false);
   const openModal = () => setIsOpen(true);
 
   return (
-    <ModalContext.Provider value={{closeModal, openModal, isOpen, from, changeCur, to }}>
+    <ModalContext.Provider value={{closeModal, openModal, isOpen, from, setFromCur, setToCur, prices, setPrices, fetchPrices, to }}>
       {children}
     </ModalContext.Provider>
   );
@@ -32,7 +32,41 @@ function LiquidityModal({ children, from, to, changeCur }) {
 }
 
 function Window(){
+
+  const [tokenOneAmount, setTokenOneAmount] = useState('');
+  const [tokenTwoAmount, setTokenTwoAmount] = useState('');
   const [mounted, setMounted] = useState(false)
+  
+  const { closeModal, isOpen, from, prices, setPrices, fetchPrices, to, setFromCur, setToCur } = useContext(ModalContext);
+  
+  function changeAmount(e) {
+    setTokenOneAmount(e.target.value);
+    if(e.target.value && prices){
+      setTokenTwoAmount((e.target.value * prices.ratio).toFixed(2))
+    }else{
+      setTokenTwoAmount(null);
+    }
+  }
+
+  function changeCurOne(type){
+    if(type.ticker === from.ticker || type.ticker === to.ticker)return;
+    setPrices(null);
+    setTokenOneAmount('');
+    setTokenTwoAmount('');
+    
+    setFromCur(type);
+    fetchPrices(type.address, to.address)
+}
+
+function changeCurTwo(type){
+      if(type.ticker === from.ticker || type.ticker === to.ticker)return;
+    setPrices(null);
+    setTokenOneAmount('');
+    setTokenTwoAmount('');
+
+    setToCur(type);
+    fetchPrices(from.address, type.address)
+  }
 
   useEffect(() => {
      setMounted(true)
@@ -40,7 +74,6 @@ function Window(){
      return () => setMounted(false)
   }, [])
 
-  const { closeModal, isOpen, from, changeCur, to } = useContext(ModalContext);
     if(!isOpen)return null
     return createPortal(
     
@@ -54,12 +87,13 @@ function Window(){
          <div className="rounded-2xl bg-[#191326] flex flex-col items-start px-4 space-y-3 py-2 text-white h-[80px]">
          <p className="text-xs font-semibold text-gray-200">Input</p>
           <div className="w-full flex justify-between pr-2">
-              <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[50%] text-2xl" />
-              <SelectModal from={from} to={to} changeCur={changeCur}>
+              <input type="text" value={tokenOneAmount} onChange={changeAmount}
+            disabled={!prices} placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[50%] text-2xl" />
+              <SelectModal from={from} to={to} changeCur={changeCurOne}>
                   <SelectModal.Open>
                   <div className="flex space-x-2 items-center cursor-pointer">
-                  <img className="w-[35px] h-auto object-cover" src={from.logo} alt="logo" />
-                    <p className={`font-bold text-base uppercase text-white`}>{from.name}</p>
+                  <img className="w-[35px] h-auto object-cover" src={from.img} alt="logo" />
+                    <p className={`font-bold text-base uppercase text-white`}>{from.ticker}</p>
                   <FaChevronDown />
               </div>
                   </SelectModal.Open>
@@ -72,8 +106,8 @@ function Window(){
      <div className="rounded-2xl bg-[#191326] flex flex-col items-start px-4 space-y-3 py-2 text-white h-[80px]">
          <p className="text-xs font-semibold text-gray-200">Input</p>
           <div className="w-full flex justify-between">
-              <input type="text" placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[20%] text-2xl" />
-             <SelectModal from={to} to={from} changeCur={changeCur}>
+              <input type="text" value={tokenTwoAmount} disabled={true} placeholder="0.0" className="outline-none bg-transparent border-none font-semibold max-w-[20%] text-2xl" />
+             <SelectModal from={to} to={from} changeCur={changeCurTwo}>
                   <SelectModal.Open>
                   <div className="flex space-x-1 items-center cursor-pointer bg-purple-800 rounded-xl p-2 px-3">
                   <p className="text-nowrap text-white font-semibold text-sm sm:text-md">
@@ -89,9 +123,9 @@ function Window(){
      </div>
   
   
-     <button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700 ">
-       Connect wallet
-     </button>
+          <div className="w-full flex items-center justify-center">
+                <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label="Connect to a wallet" />
+            </div>
 </form> ,
       document.body
     )

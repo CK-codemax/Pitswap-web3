@@ -10,6 +10,7 @@ import { SiWalletconnect } from "react-icons/si";
 import { FaRegCircleQuestion } from "react-icons/fa6";
 
 import { FaLongArrowAltDown } from "react-icons/fa";
+import tokenList from "../../tokenList.json"
 
 const options = [
     {logo : '/bnb-real.png', name : 'bnb',},
@@ -29,14 +30,14 @@ const options = [
 
 const ModalContext = createContext();
 
-function SelectModal({ children, from, changeCur, to }) {
+function SelectModal({ children, from, changeCur, to}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => setIsOpen(false);
   const openModal = () => setIsOpen(true);
 
   return (
-    <ModalContext.Provider value={{closeModal, openModal, isOpen, from, changeCur, to }}>
+    <ModalContext.Provider value={{closeModal, openModal, isOpen, from, changeCur, to}}>
       {children}
     </ModalContext.Provider>
   );
@@ -77,7 +78,6 @@ function Window(){
   )
 
   function handleChangeCur(type){
-    if(type.name === from.name || type.name === to.name)return;
     changeCur(type);
     closeModal();
   }
@@ -107,9 +107,9 @@ function Window(){
 
             <div className="overflow-hidden pl-4">
                 <div className="flex flex-col space-y-6 h-[300px] overflow-y-scroll pb-8">
-                    {options.map((type => <div onClick={() => handleChangeCur(type)} className={`flex items-center ${from.name === type.name || to.name === type.name ? 'opacity-[50%]' : 'opacity-100'} space-x-3 cursor-pointer`} key={type.name}>
-                        <img className="w-[35px] h-auto object-cover" src={type.logo} alt="logo" />
-                        <p className={`font-bold text-base uppercase text-white`}>{type.name}</p>
+                    {tokenList.map((type => <div onClick={() => handleChangeCur(type)} className={`flex items-center ${from.ticker === type.ticker || to.ticker === type.ticker ? 'opacity-[50%]' : 'opacity-100'} space-x-3 cursor-pointer`} key={type.name}>
+                        <img className="w-[35px] h-auto object-cover" src={type.img} alt="logo" />
+                        <p className={`font-bold text-base uppercase text-white`}>{type.ticker}</p>
                     </div>))}
                 </div>
 

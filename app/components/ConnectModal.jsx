@@ -1,5 +1,4 @@
 'use client'
-import Image from "next/image";
 import { cloneElement, createContext, useContext, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { IoShieldOutline } from "react-icons/io5";
@@ -10,14 +9,14 @@ import { SiWalletconnect } from "react-icons/si";
 
 const ModalContext = createContext();
 
-function ConnectModal({ children }) {
+function ConnectModal({ children, connect }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => setIsOpen(false);
   const openModal = () => setIsOpen(true);
 
   return (
-    <ModalContext.Provider value={{closeModal, openModal, isOpen }}>
+    <ModalContext.Provider value={{closeModal, openModal, isOpen, connect }}>
       {children}
     </ModalContext.Provider>
   );
@@ -38,7 +37,7 @@ function Window(){
      return () => setMounted(false)
   }, [])
 
-  const { closeModal, isOpen } = useContext(ModalContext);
+  const { closeModal, isOpen, connect } = useContext(ModalContext);
   const windowRef = useRef()
  
 
@@ -71,7 +70,7 @@ function Window(){
             </div>
 
             <div className="flex flex-col space-y-3 px-6">
-                <div className="flex items-center justify-between border cursor-pointer transition-all duration-200 ease-in-out hover:border-purple-600 border-gray-100 rounded-xl p-3">
+                <div onClick={connect} className="flex items-center justify-between border cursor-pointer transition-all duration-200 ease-in-out hover:border-purple-600 border-gray-100 rounded-xl p-3">
                     <p className="text-white font-semibold flex-grow">WalletConnect</p>
                     <SiWalletconnect className="text-blue-400 text-[28px]" />
                 </div>

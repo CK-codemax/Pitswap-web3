@@ -1,15 +1,20 @@
 'use client'
 
-import Image from "next/image";
 import { CiSettings } from "react-icons/ci";
 import { FaEllipsis } from "react-icons/fa6";
 import ConnectModal from "./ConnectModal";
 import SettingsModal from "./SettingsModal";
 import MenuModal from "./MenuModal";
 import Link from "next/link";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
+
+//import {useAccount} from '@web3modal/wagmi/react'
 
 
 export default function Header() {
+    // const {address, isConnected} = useAccount()
+
+    const {open, close, connect} = useWeb3Modal();
   return (
     <header className="flex justify-between items-start sm:items-center pt-6 sm:pt-2 py-2 px-4">
         <Link href={'/'}>
@@ -17,12 +22,14 @@ export default function Header() {
         </Link>
 
         <div className="hidden sm:flex items-center space-x-3">
-            <ConnectModal>
+        <w3m-connect-button size="md" label="Connect to a wallet" />
+
+            {/* <ConnectModal connect={connect}>
                 <ConnectModal.Open>
                 <p className="p-[6px] font-semibold text-blue-400 bg-gray-600 rounded-md cursor-pointer transition-all duration-150 ease-in-out hover:bg-gray-500">Connect to a wallet</p>
                 </ConnectModal.Open>
                 <ConnectModal.Window/>
-            </ConnectModal>
+            </ConnectModal> */}
             <SettingsModal>
                 <SettingsModal.Open>
                     <div className="p-1 rounded-md bg-gray-700 cursor-pointer transition-all hover:bg-gray-600 duration-150 ease-in-out">
@@ -69,6 +76,9 @@ export default function Header() {
                 </MenuModal.Open>
                 <MenuModal.Window />
             </MenuModal>
+
+          
+
            </div>
         </div>
     </header>
