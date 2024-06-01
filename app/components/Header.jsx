@@ -22,6 +22,7 @@ export default function Header() {
         </Link>
 
         <div className="hidden sm:flex items-center space-x-3">
+        <w3m-network-button />
         <w3m-connect-button size="md" label="Connect to a wallet" />
 
             {/* <ConnectModal connect={connect}>

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ReactNode } from 'react'
+import React from 'react'
 import { createWeb3Modal } from '@web3modal/wagmi/react'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
