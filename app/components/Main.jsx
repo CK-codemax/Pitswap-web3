@@ -23,8 +23,10 @@ import LiquidityModal from "./LiquidityModal";
 // import { fetchPrices } from "../utils/fetchCurrency";
 import axios from "axios";
 import ConnectModal from "./ConnectModal";
+import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 
-export default function Main({isConnected, address, connect}) {
+export default function Main() {
+    const { address, isConnected } = useAccount();
     const [fromCur, setFromCur] = useState(tokenList[0]);
     const [toCur, setToCur] = useState(tokenList[1]);
     const [active, setActive] = useState('swap');
@@ -32,6 +34,28 @@ export default function Main({isConnected, address, connect}) {
     const [tokenOneAmount, setTokenOneAmount] = useState('');
     const [tokenTwoAmount, setTokenTwoAmount] = useState('');
     const [invert, setInvert] = useState(false);
+    const [slippage, setSlippage] = useState(2.5);
+    const [txDetails, setTxDetails] = useState({
+        to:null,
+        data: null,
+        value: null,
+      }); 
+    
+      const {data, sendTransaction} = useSendTransaction({
+        request: {
+          from: address,
+          to: String(txDetails.to),
+          data: String(txDetails.data),
+          value: String(txDetails.value),
+        }
+      })
+    
+      const { isLoading, isSuccess } = useWaitForTransactionReceipt({
+        hash: data?.hash,
+      })
+    
+
+    console.log(`Address : ${address} \n Connected : ${isConnected}`)
 
     async function fetchPrices(one, two){
         const res = await axios.get('/api/getPrice', {
@@ -44,6 +68,31 @@ export default function Main({isConnected, address, connect}) {
         console.log(res.data);
         setPrices(res.data);
     }
+
+    async function fetchDexSwap(){
+
+        const allowance = await axios.get(`https://api.1inch.io/v5.0/1/approve/allowance?tokenAddress=${fromCur.address}&walletAddress=${address}`)
+      
+        if(allowance.data.allowance === "0"){
+    
+          const approve = await axios.get(`https://api.1inch.io/v5.0/1/approve/transaction?tokenAddress=${fromCur.address}`)
+    
+          setTxDetails(approve.data);
+          console.log("not approved")
+          return
+    
+        }
+    
+        const tx = await axios.get(
+          `https://api.1inch.io/v5.0/1/swap?fromTokenAddress=${fromCur.address}&toTokenAddress=${toCur.address}&amount=${tokenOneAmount.padEnd(fromCur.decimals+tokenOneAmount.length, '0')}&fromAddress=${address}&slippage=${slippage}`
+        )
+    
+        let decimals = Number(`1E${tokenTwo.decimals}`)
+        setTokenTwoAmount((Number(tx.data.toTokenAmount)/decimals).toFixed(2));
+    
+        setTxDetails(tx.data.tx);
+      
+      }
 
     function switchCurrencies(){
         setPrices(null);
@@ -95,10 +144,18 @@ export default function Main({isConnected, address, connect}) {
         fetchPrices(tokenList[0].address, tokenList[1].address)
     }, [])
 
+    useEffect(()=>{
+
+        if(txDetails.to && isConnected){
+          sendTransaction();
+        }
+    }, [txDetails])
+  
+
   return (
    
-    <form onSubmit={(e) => e.preventDefault()}  className="fixed w-[90%] sm:w-[400px] top-[350px] min-h-[450px] py-6 border-black border p-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#2b233fb3]">
-        <div className="fixed top-4 w-full flex text-gray-400 justify-between items-center pb-2">
+    <form onSubmit={(e) => e.preventDefault()}  className="w-[90%] sm:w-[400px] min-h-[500px] py-6 border-black border p-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl bg-[#2b233fb3]">
+        <div className="w-full flex text-gray-400 justify-between items-center pb-2">
             {/* <FaArrowLeft className="text-[16px]" /> */}
             <p onClick={() => setActive('swap')} className={`cursor-pointer hover:text-white text-center ${active === 'swap' && 'text-white font-bold'} capitalize w-full mx-auto  py-2 sm:text-xl`}>Swap</p>
             <p onClick={() => setActive('fiat')} className={`cursor-pointer hover:text-white text-center ${active === 'fiat' && 'text-white font-bold'} capitalize w-full mx-auto  py-2 sm:text-xl`}>Fiat</p>
@@ -147,7 +204,7 @@ export default function Main({isConnected, address, connect}) {
               </div>
          </div>
 
-         {prices && <div className="flex justify-between items-center text-gray-400 text-xs font-semibold">
+         {prices && <div className="flex justify-between space-x-5 items-center text-gray-400 text-xs font-semibold">
             <p>Price</p>
             <div className="flex flex-grow justify-end space-x-3 items-center">
                  <p className="flex-grow text-right">{!invert ? `${prices.ratio} ${fromCur.ticker} per ${toCur.ticker}` : `${1 / prices.ratio} ${toCur.ticker} per ${fromCur.ticker}`}</p>
@@ -167,6 +224,8 @@ export default function Main({isConnected, address, connect}) {
             <div className="w-full flex items-center justify-center">
                 <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label="Connect to a wallet" />
             </div>
+
+            <button className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount || !isConnected ? 'opacity-0' : 'opacity-100'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
          </>
         )}
 
@@ -179,7 +238,7 @@ export default function Main({isConnected, address, connect}) {
                 <>
                    <LiquidityModal from={fromCur} to={toCur} setFromCur={setFromCur} setToCur={setToCur} prices={prices} setPrices={setPrices} fetchPrices={fetchPrices}>
                         <LiquidityModal.Open>
-                            <button className="w-full flex items-center justify-center text-center mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700 ">
+                            <button  className="w-full flex items-center justify-center text-center mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700 ">
                                 Add Liquidity
                             </button>
                         </LiquidityModal.Open>

@@ -9,6 +9,10 @@ import { SiBinance } from "react-icons/si";
 import { SiWalletconnect } from "react-icons/si";
 import { FaArrowLeft, FaChevronDown, FaRegCircleQuestion } from "react-icons/fa6";
 import SelectModal from "./SelectModal";
+import { AiOutlineRetweet } from "react-icons/ai";
+
+import tokenList from "../../tokenList.json"
+
 
 const ModalContext = createContext();
 
@@ -26,15 +30,22 @@ function LiquidityModal({ children, from, to, setFromCur, setToCur, prices, setP
   }
 
   function Open({children}) {
-  const { openModal } = useContext(ModalContext);
+  const { openModal, setFromCur, setToCur } = useContext(ModalContext);
 
-  return cloneElement(children, {onClick : () => openModal()})
+  function handleChangeLiquidity(){
+    setFromCur(tokenList[0])
+    setToCur(tokenList[1])
+    openModal()
+}
+
+  return cloneElement(children, {onClick : () => handleChangeLiquidity()})
 }
 
 function Window(){
 
   const [tokenOneAmount, setTokenOneAmount] = useState('');
   const [tokenTwoAmount, setTokenTwoAmount] = useState('');
+  const [invert, setInvert] = useState(false);
   const [mounted, setMounted] = useState(false)
   
   const { closeModal, isOpen, from, prices, setPrices, fetchPrices, to, setFromCur, setToCur } = useContext(ModalContext);
@@ -121,6 +132,16 @@ function changeCurTwo(type){
   
           </div>
      </div>
+
+     {prices && <div className="flex justify-between space-x-5 items-center text-gray-400 text-xs font-semibold">
+            <p>Price</p>
+            <div className="flex flex-grow justify-end space-x-3 items-center">
+                 <p className="flex-grow text-right">{!invert ? `${prices.ratio} ${from.ticker} per ${to.ticker}` : `${1 / prices.ratio} ${to.ticker} per ${from.ticker}`}</p>
+                 <div onClick={() => setInvert((init) => !init)} className="p-2 rounded-full cursor-pointer bg-gray-600">
+                    <AiOutlineRetweet className="text-[16px] text-white" />
+                 </div>
+            </div>
+         </div>}
   
   
           <div className="w-full flex items-center justify-center">

@@ -16,7 +16,7 @@ export default function Header() {
 
     const {open, close, connect} = useWeb3Modal();
   return (
-    <header className="flex justify-between items-start sm:items-center pt-6 sm:pt-2 py-2 px-4">
+    <header className="fixed top-4 w-full flex justify-between items-start sm:items-center pt-6 sm:pt-2 py-2 px-4">
         <Link href={'/'}>
             <img className="hover:-rotate-[15deg] w-[130px] object-cover sm:w-[200px] h-auto transition-all duration-300 ease-in-out" src={'/seyi-logo.png'} alt="logo"  />
         </Link>
@@ -25,12 +25,6 @@ export default function Header() {
         <w3m-network-button />
         <w3m-connect-button size="md" label="Connect to a wallet" />
 
-            {/* <ConnectModal connect={connect}>
-                <ConnectModal.Open>
-                <p className="p-[6px] font-semibold text-blue-400 bg-gray-600 rounded-md cursor-pointer transition-all duration-150 ease-in-out hover:bg-gray-500">Connect to a wallet</p>
-                </ConnectModal.Open>
-                <ConnectModal.Window/>
-            </ConnectModal> */}
             <SettingsModal>
                 <SettingsModal.Open>
                     <div className="p-1 rounded-md bg-gray-700 cursor-pointer transition-all hover:bg-gray-600 duration-150 ease-in-out">
@@ -52,12 +46,13 @@ export default function Header() {
         </div>
 
         <div className="flex sm:hidden flex-col items-end space-y-3">
-            <ConnectModal>
+            {/* <ConnectModal>
                 <ConnectModal.Open>
                 <p className="p-[6px] font-semibold text-blue-400 text-nowrap bg-gray-600 rounded-md cursor-pointer transition-all duration-150 ease-in-out hover:bg-gray-500">Connect to a wallet</p>
                 </ConnectModal.Open>
                 <ConnectModal.Window/>
-            </ConnectModal>
+            </ConnectModal> */}
+             <w3m-connect-button size="md" label="Connect to a wallet" />
            <div className="flex items-center space-x-3 justify-end">
            <SettingsModal>
                 <SettingsModal.Open>
