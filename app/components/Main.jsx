@@ -1,29 +1,18 @@
 'use client'
 
 import tokenList from "../../tokenList.json"
-
-
-import { BsGlobeEuropeAfrica } from "react-icons/bs";
-import { CiFaceSmile, CiLocationOn, CiUser } from "react-icons/ci";
-import { GoChevronDown, GoPlus } from "react-icons/go";
-import { HiXMark } from "react-icons/hi2";
-import { AiOutlinePicture } from "react-icons/ai";
-import { FaEllipsis, FaRegCircleQuestion } from "react-icons/fa6";
+import { FaRegCircleQuestion } from "react-icons/fa6";
 
 import { FaLongArrowAltDown } from "react-icons/fa";
 import { AiOutlineRetweet } from "react-icons/ai";
 
-import { FaArrowLeft } from "react-icons/fa";
-import { SiBinance } from "react-icons/si";
 import { FaChevronDown } from "react-icons/fa6";
-import QuestionModal from "./QuestionModal";
 import SelectModal from "./SelectModal";
 import { useEffect, useState } from "react";
 import LiquidityModal from "./LiquidityModal";
-// import { fetchPrices } from "../utils/fetchCurrency";
 import axios from "axios";
-import ConnectModal from "./ConnectModal";
 import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
+import toast from "react-hot-toast";
 
 export default function Main() {
     const { address, isConnected } = useAccount();
@@ -87,7 +76,7 @@ export default function Main() {
           `https://api.1inch.io/v5.0/1/swap?fromTokenAddress=${fromCur.address}&toTokenAddress=${toCur.address}&amount=${tokenOneAmount.padEnd(fromCur.decimals+tokenOneAmount.length, '0')}&fromAddress=${address}&slippage=${slippage}`
         )
     
-        let decimals = Number(`1E${tokenTwo.decimals}`)
+        let decimals = Number(`1E${toCur.decimals}`)
         setTokenTwoAmount((Number(tx.data.toTokenAmount)/decimals).toFixed(2));
     
         setTxDetails(tx.data.tx);
@@ -150,7 +139,49 @@ export default function Main() {
           sendTransaction();
         }
     }, [txDetails])
-  
+
+    useEffect(()=>{
+
+        if(isLoading){
+          toast.loading('Processing...', {
+            position: 'top-left',
+            duration: 1500,
+            style: {
+              minWidth: '200px',
+              backgroundColor: '#333',
+              color: '#fff',
+            },
+        })
+        }    
+    
+      },[isLoading])
+    
+      useEffect(()=>{
+
+        if(isSuccess){
+          toast.success('Transaction successful', {
+            position: 'top-left',
+            duration: 1500,
+            style: {
+              minWidth: '200px',
+              backgroundColor: '#333',
+              color: '#fff',
+            }
+        })
+        }else if(txDetails.to){
+      
+          toast.error('Transaction failed', {
+            duration: 1500,
+            style: {
+              minWidth: '200px',
+              backgroundColor: '#333',
+              color: '#fff',
+            }
+        })
+        }
+    
+    
+      },[isSuccess])
 
   return (
    
@@ -225,7 +256,7 @@ export default function Main() {
                 <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label="Connect to a wallet" />
             </div>
 
-            <button className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount || !isConnected ? 'opacity-0' : 'opacity-100'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
+            <button disabled={!tokenOneAmount || !isConnected} className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount || !isConnected ? 'cursor-not-allowed' : 'cursor-pointer'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
          </>
         )}
 

@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { State, WagmiProvider } from 'wagmi'
 import { config, projectId } from './wagmi'
+import { Toaster } from 'react-hot-toast'
 
 // Setup queryClient
 const queryClient = new QueryClient()
@@ -27,7 +28,10 @@ export default function Web3ModalProvider({
 }) {
   return (
     <WagmiProvider config={config} initialState={initialState}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+      <Toaster />
+        {children}
+        </QueryClientProvider>
     </WagmiProvider>
   )
 }
