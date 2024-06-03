@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="fixed top-4 w-full flex justify-between items-start sm:items-center pt-6 sm:pt-2 py-2 px-4">
+    <header className="fixed top-0 w-full flex justify-between items-start sm:items-center py-2 px-4">
         <Link href={'/'}>
             <img className="hover:-rotate-[15deg] w-[130px] object-cover sm:w-[200px] h-auto transition-all duration-300 ease-in-out" src={'/seyi-logo.png'} alt="logo"  />
         </Link>

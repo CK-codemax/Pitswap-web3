@@ -185,7 +185,7 @@ export default function Main() {
 
   return (
    
-    <form onSubmit={(e) => e.preventDefault()}  className="w-[90%] sm:w-[400px] min-h-[500px] py-6 border-black border p-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl bg-[#2b233fb3]">
+    <form onSubmit={(e) => e.preventDefault()}  className="w-[90%] sm:w-[400px] min-h-[full] py-3 border-black border p-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-2 justify-center rounded-2xl bg-[#2b233fb3]">
         <div className="w-full flex text-gray-400 justify-between items-center pb-2">
             {/* <FaArrowLeft className="text-[16px]" /> */}
             <p onClick={() => setActive('swap')} className={`cursor-pointer hover:text-white text-center ${active === 'swap' && 'text-white font-bold'} capitalize w-full mx-auto  py-2 sm:text-xl`}>Swap</p>

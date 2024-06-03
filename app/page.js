@@ -7,9 +7,9 @@ export default function Page(){
 
 
   return (
-    <div className="w-full min-h-screen overflow-hidden parent">
+    <div className="w-full min-h-screen overflow-scroll scrollbar-hide parent bg-zinc-900">
       <Header  />
-     <div className="max-h-[450px] overflow-y-scroll scrollbar-hide fixed left-1/2 -translate-x-[50%] top-[100px]">
+     <div className="max-h-[450px] w-full overflow-y-scroll scrollbar-hide fixed flex justify-center top-[170px] sm:top-[150px] xl:top-[100px]">
      <Main />
      </div>
     </div>
