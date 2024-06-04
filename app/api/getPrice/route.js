@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server'
-import tokenList from "../../../tokenList.json"
+
+import tokenList from "../../../new-tokens.json";
 
 const Moralis = require('moralis').default;
 
@@ -14,10 +15,12 @@ const addressTwo = url.searchParams.get('addressTwo');
   try{
     const responseOne = await Moralis.EvmApi.token.getTokenPrice({
         address : addressOne,
+        chain : tokenList.find((token) => token.address === addressOne).chain
     })
-
+    
     const responseTwo = await Moralis.EvmApi.token.getTokenPrice({
         address : addressTwo,
+        chain : tokenList.find((token) => token.address === addressTwo).chain
     })
 
     console.log(responseOne.raw, responseTwo.raw);

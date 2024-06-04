@@ -11,7 +11,9 @@ import { FaArrowLeft, FaChevronDown, FaRegCircleQuestion } from "react-icons/fa6
 import SelectModal from "./SelectModal";
 import { AiOutlineRetweet } from "react-icons/ai";
 
-import tokenList from "../../tokenList.json"
+import tokenList from "../../new-tokens.json"
+import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
+import toast from "react-hot-toast";
 
 
 const ModalContext = createContext();
@@ -42,11 +44,109 @@ function LiquidityModal({ children, from, to, setFromCur, setToCur, prices, setP
 }
 
 function Window(){
-
+  const { address, isConnected } = useAccount();
   const [tokenOneAmount, setTokenOneAmount] = useState('');
   const [tokenTwoAmount, setTokenTwoAmount] = useState('');
   const [invert, setInvert] = useState(false);
   const [mounted, setMounted] = useState(false)
+
+  const [slippage, setSlippage] = useState(2.5);
+  const [txDetails, setTxDetails] = useState({
+      to:null,
+      data: null,
+      value: null,
+    }); 
+  
+    const {data, sendTransaction} = useSendTransaction({
+      request: {
+        from: address,
+        to: String(txDetails.to),
+        data: String(txDetails.data),
+        value: String(txDetails.value),
+      }
+    })
+  
+    const { isLoading, isSuccess } = useWaitForTransactionReceipt({
+      hash: data?.hash,
+    })
+  
+    async function fetchDexSwap(){
+
+      const allowance = await axios.get(`https://api.1inch.io/v5.0/1/approve/allowance?tokenAddress=${fromCur.address}&walletAddress=${address}`)
+    
+      if(allowance.data.allowance === "0"){
+  
+        const approve = await axios.get(`https://api.1inch.io/v5.0/1/approve/transaction?tokenAddress=${fromCur.address}`)
+  
+        setTxDetails(approve.data);
+        console.log("not approved")
+        return
+  
+      }
+  
+      const tx = await axios.get(
+        `https://api.1inch.io/v5.0/1/swap?fromTokenAddress=${from.address}&toTokenAddress=${to.address}&amount=${tokenOneAmount.padEnd(from.decimals+tokenOneAmount.length, '0')}&fromAddress=${address}&slippage=${slippage}`
+      )
+  
+      let decimals = Number(`1E${to.decimals}`)
+      setTokenTwoAmount((Number(tx.data.toTokenAmount)/decimals).toFixed(2));
+  
+      setTxDetails(tx.data.tx);
+    
+    }
+
+    
+    useEffect(()=>{
+
+      if(txDetails.to && isConnected){
+        sendTransaction();
+      }
+  }, [txDetails])
+
+  useEffect(()=>{
+
+      if(isLoading){
+        toast.loading('Processing...', {
+          position: 'top-left',
+          duration: 1500,
+          style: {
+            minWidth: '200px',
+            backgroundColor: '#333',
+            color: '#fff',
+          },
+      })
+      }    
+  
+    },[isLoading])
+  
+    useEffect(()=>{
+
+      if(isSuccess){
+        toast.success('Transaction successful', {
+          position: 'top-left',
+          duration: 1500,
+          style: {
+            minWidth: '200px',
+            backgroundColor: '#333',
+            color: '#fff',
+          }
+      })
+      }else if(txDetails.to){
+    
+        toast.error('Transaction failed', {
+          duration: 1500,
+          style: {
+            minWidth: '200px',
+            backgroundColor: '#333',
+            color: '#fff',
+          }
+      })
+      }
+  
+  
+    },[isSuccess])
+
+
   
   const { closeModal, isOpen, from, prices, setPrices, fetchPrices, to, setFromCur, setToCur } = useContext(ModalContext);
   
@@ -89,7 +189,7 @@ function changeCurTwo(type){
     return createPortal(
     
        
-    <form  className="fixed w-[90%] sm:w-[400px] top-[350px] min-h-[450px] py-3 border-black border p-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#2b233f]">
+    <form  className="fixed w-[90%] sm:w-[400px] top-[350px] xl:top-[300px] min-h-[450px] py-3 border-black border p-4 shadow-[0 2.4rem 3.2rem rgba(0, 0, 0, 0.12)] flex flex-col space-y-4 justify-center rounded-2xl left-[50%] -translate-x-[50%] -translate-y-[50%] bg-[#2b233f]">
        <div className="w-full flex text-gray-400 jusify-evenly items-center">
             <FaArrowLeft onClick={closeModal} className="text-[16px] cursor-pointer" />
             <p  className="font-bold cursor-pointer text-center capitalize flex-grow  py-2 sm:text-xl">Add Liquidity</p>
@@ -144,9 +244,13 @@ function changeCurTwo(type){
          </div>}
   
   
-          <div className="w-full flex items-center justify-center">
+         {!isConnected ? (
+            <div className="w-full flex items-center justify-center">
                 <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label="Connect to a wallet" />
-            </div>
+            </div>) :
+
+            (<button disabled={!tokenOneAmount} className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount ? 'cursor-not-allowed' : 'cursor-pointer'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
+    )}
 </form> ,
       document.body
     )

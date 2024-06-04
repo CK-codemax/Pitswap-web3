@@ -1,6 +1,6 @@
 'use client'
 
-import tokenList from "../../tokenList.json"
+import tokenList from "../../new-tokens.json"
 import { FaRegCircleQuestion } from "react-icons/fa6";
 
 import { FaLongArrowAltDown } from "react-icons/fa";
@@ -251,12 +251,13 @@ export default function Main() {
          </div>
       
       
-
+            {!isConnected ? (
             <div className="w-full flex items-center justify-center">
                 <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label="Connect to a wallet" />
-            </div>
+            </div>) :
 
-            <button disabled={!tokenOneAmount || !isConnected} className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount || !isConnected ? 'cursor-not-allowed' : 'cursor-pointer'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
+            (<button disabled={!tokenOneAmount} className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount ? 'cursor-not-allowed' : 'cursor-pointer'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
+    )}
          </>
         )}
 
