@@ -51,6 +51,7 @@ function SelectModal({ children, from, changeCur, to}) {
 
 function Window(){
   const [mounted, setMounted] = useState(false)
+  const [queryCur, setQueryCur] = useState('');
 
   useEffect(() => {
      setMounted(true)
@@ -82,6 +83,10 @@ function Window(){
     closeModal();
   }
 
+  function handleCurrencyQuery(e){
+   setQueryCur(e.target.value);
+  }
+
 
     if(!mounted)return
     if(!isOpen)return null
@@ -98,7 +103,7 @@ function Window(){
                 </div>
             </div>
 
-            <input type="text" placeholder="Search name or paste address" className="py-3 mx-4 px-4 border border-gray-300 rounded-2xl bg-transparent outline-none text-white focus:border-purple-600" />
+            <input type="text" value={queryCur} onChange={(e) => handleCurrencyQuery(e)} placeholder="Search name or paste address" className="py-3 mx-4 px-4 border border-gray-300 rounded-2xl bg-transparent outline-none text-white focus:border-purple-600" />
 
             <div className="flex items-center justify-between px-4 text-white">
                 <p className="font-semibold text-xs">Token name</p>
@@ -107,9 +112,12 @@ function Window(){
 
             <div className="overflow-hidden pl-4">
                 <div className="flex flex-col space-y-6 h-[300px] overflow-y-scroll pb-8">
-                    {tokenList.map((type => <div onClick={() => handleChangeCur(type)} className={`flex items-center ${from.ticker === type.ticker || to.ticker === type.ticker ? 'opacity-[50%]' : 'opacity-100'} space-x-3 cursor-pointer`} key={type.name}>
+                    {tokenList.filter((token) => token.ticker.includes(queryCur.toUpperCase())).map((type => <div onClick={() => handleChangeCur(type)} className={`flex group items-center ${from.ticker === type.ticker || to.ticker === type.ticker ? 'opacity-[50%]' : 'opacity-100'} space-x-3 cursor-pointer`} key={type.name}>
                         <img className="w-[35px] h-auto object-cover" src={type.img} alt="logo" />
-                        <p className={`font-bold text-base uppercase text-white`}>{type.ticker}</p>
+                        <div className="flex items-start justify-start flex-col space-y-2">
+                  <div className={`text-[13px] ml-[10px] ${from.ticker === type.ticker || to.ticker === type.ticker ? '' : 'group-hover:text-white'} font-[300px] text-[#51596f]`}>{type.name}</div>
+                  <div className="text-sm ml-[10px] text-white font-[500]">{type.ticker}</div>
+                </div>
                     </div>))}
                 </div>
 

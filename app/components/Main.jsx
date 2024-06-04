@@ -13,6 +13,7 @@ import LiquidityModal from "./LiquidityModal";
 import axios from "axios";
 import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import toast from "react-hot-toast";
+import SettingsModal from "./SettingsModal";
 
 export default function Main() {
     const { address, isConnected } = useAccount();
@@ -23,7 +24,7 @@ export default function Main() {
     const [tokenOneAmount, setTokenOneAmount] = useState('');
     const [tokenTwoAmount, setTokenTwoAmount] = useState('');
     const [invert, setInvert] = useState(false);
-    const [slippage, setSlippage] = useState(2.5);
+    const [slippage, setSlippage] = useState(6);
     const [txDetails, setTxDetails] = useState({
         to:null,
         data: null,
@@ -247,7 +248,13 @@ export default function Main() {
 
          <div className="flex justify-between items-center text-gray-400 text-xs font-semibold">
             <p>Slippage tolerance</p>
-            <p>6%</p>
+            <SettingsModal slippage={slippage} setSlippage={setSlippage}>
+                <SettingsModal.Open>
+                    <p className="cursor-pointer">{Number(slippage)}%</p>
+                </SettingsModal.Open>
+                <SettingsModal.Window />
+            </SettingsModal>
+           
          </div>
       
       
@@ -256,7 +263,7 @@ export default function Main() {
                 <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label="Connect to a wallet" />
             </div>) :
 
-            (<button disabled={!tokenOneAmount} className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount ? 'cursor-not-allowed' : 'cursor-pointer'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
+            (<button disabled={!tokenOneAmount || slippage <= 0 || slippage > 5} className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount ? 'cursor-not-allowed' : 'cursor-pointer'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
     )}
          </>
         )}

@@ -1,24 +1,19 @@
 'use client'
-import Image from "next/image";
 import { cloneElement, createContext, useContext, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { IoShieldOutline } from "react-icons/io5";
-
-import { HiXMark } from "react-icons/hi2";
-import { SiBinance } from "react-icons/si";
-import { SiWalletconnect } from "react-icons/si";
 import { FaRegCircleQuestion } from "react-icons/fa6";
+import { BiSolidError } from "react-icons/bi";
 
 const ModalContext = createContext();
 
-function SettingsModal({ children }) {
+function SettingsModal({ children, setSlippage, slippage }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => setIsOpen(false);
   const openModal = () => setIsOpen(true);
 
   return (
-    <ModalContext.Provider value={{closeModal, openModal, isOpen }}>
+    <ModalContext.Provider value={{closeModal, openModal, isOpen, setSlippage, slippage }}>
       {children}
     </ModalContext.Provider>
   );
@@ -39,7 +34,7 @@ function Window(){
      return () => setMounted(false)
   }, [])
 
-  const { closeModal, isOpen } = useContext(ModalContext);
+  const { closeModal, isOpen, setSlippage, slippage } = useContext(ModalContext);
   const windowRef = useRef()
  
 
@@ -74,21 +69,24 @@ function Window(){
                <p className="text-xs">Slippage tolerance</p>
             </div>
             <div className="flex space-x-3 items-center">
-                <p className="flex items-center justify-center text-white text-xs font-semibold cursor-pointer min-w-[50px] h-[35px] transition-all duration-150 ease-in-out hover:border-gray-100 rounded-full bg-transparent border border-gray-300">0.1%</p>
-                <p className="flex items-center justify-center text-white text-xs font-semibold cursor-pointer min-w-[50px] h-[35px] transition-all duration-150 ease-in-out hover:border-gray-100 rounded-full bg-transparent border border-gray-300">0.5%</p>
-                <p className="flex items-center justify-center text-white text-xs font-semibold cursor-pointer min-w-[50px] h-[35px] transition-all duration-150 ease-in-out hover:border-gray-100 rounded-full bg-transparent border border-gray-300">1%</p>
-                <div className="flex flex-grow pl-8 sm:pl-20 border w-[100px] h-[35px] rounded-full border-purple-600 hover:border-gray-300 transition ease-in-out duration-150">
-                    <input type="text" className="outline-none w-full border-none bg-transparent text-white placeholder:text-gray-400" placeholder="0.10%" />
+                <p onClick={() => setSlippage(0.1)} className="flex items-center justify-center text-white text-xs font-semibold cursor-pointer min-w-[50px] h-[35px] transition-all duration-150 ease-in-out hover:border-gray-100 rounded-full bg-transparent border border-gray-300">0.1%</p>
+                <p onClick={() => setSlippage(0.5)} className="flex items-center justify-center text-white text-xs font-semibold cursor-pointer min-w-[50px] h-[35px] transition-all duration-150 ease-in-out hover:border-gray-100 rounded-full bg-transparent border border-gray-300">0.5%</p>
+                <p onClick={() => setSlippage(1)} className="flex items-center justify-center text-white text-xs font-semibold cursor-pointer min-w-[50px] h-[35px] transition-all duration-150 ease-in-out hover:border-gray-100 rounded-full bg-transparent border border-gray-300">1%</p>
+                <div className="flex relative flex-grow pl-8 sm:pl-20 border w-[100px] h-[35px] rounded-full border-purple-600 hover:border-gray-300 transition ease-in-out duration-150">
+                    <BiSolidError className="text-[16px] absolute left-3 top-[50%] -translate-y-1/2 text-amber-600" />
+                    <input onChange={e => setSlippage(e.target.value)} type="text" className="outline-none w-full border-none bg-transparent text-white placeholder:text-gray-400" placeholder={`${slippage}%`} />
                 </div>
             </div>
 
-            <p className="text-sm text-amber-600">Your transaction may be frontrun</p>
+           {slippage > 5 && slippage < 40 &&  <p className="text-sm text-amber-600">Your transaction may be frontrun</p>}
+           {+slippage === 0 &&  <p className="text-sm text-amber-600">Your transaction may fail</p>}
+           {slippage > 0 && slippage <= 5 && (
                 <div className="flex space-x-1 items-center text-gray-400">
 
-                <p className="font-semibold text-left  py-2 text-sm cursor-pointer">Transaction deadline
-                </p>
+                <p className="font-semibold text-left  py-2 text-sm cursor-pointer">Transaction deadline</p>
                 <FaRegCircleQuestion className="text-[12px]" />
                 </div>
+                )}
                 <div className="flex items-center space-x-3">
 
                 <div className="pl-20 flex items-center border w-[130px] h-[35px] rounded-full border-purple-600 hover:border-gray-300 transition ease-in-out duration-150">
