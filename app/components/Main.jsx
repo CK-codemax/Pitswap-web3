@@ -63,7 +63,7 @@ export default function Main() {
 
         const allowance = await axios.get('/api/proxy', {
         params : {
-          realUrl : `/approve/allowance?tokenAddress=${fromCur.address}&walletAddress=0x61E55E8DFA3D177106C93b13174C0906A41741dB`,
+          realUrl : `/approve/allowance?tokenAddress=${fromCur.address}&walletAddress=${address}`,
         }
       })
       
@@ -263,17 +263,13 @@ export default function Main() {
          </div>
       
       
-            {/* {!isConnected ? (
+            {!isConnected ? (
             <div className="w-full flex items-center justify-center">
                 <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label="Connect to a wallet" />
             </div>) :
 
             (<button disabled={!tokenOneAmount || slippage <= 0 || slippage > 5} className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount ? 'cursor-not-allowed' : 'cursor-pointer'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
-    )} */}
-
-    
-<button  className={`text-white px-4 py-2 w-[50%] mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
-  
+    )}
          </>
         )}
 
