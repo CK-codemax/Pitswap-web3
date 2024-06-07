@@ -72,11 +72,11 @@ function Window(){
   
     async function fetchDexSwap(){
 
-      const allowance = await axios.get(`https://api.1inch.io/v5.0/1/approve/allowance?tokenAddress=${fromCur.address}&walletAddress=${address}`)
+      const allowance = await axios.get(`https://api.1inch.io/v5.0/1/approve/allowance?tokenAddress=${from.address}&walletAddress=${address}`)
     
       if(allowance.data.allowance === "0"){
   
-        const approve = await axios.get(`https://api.1inch.io/v5.0/1/approve/transaction?tokenAddress=${fromCur.address}`)
+        const approve = await axios.get(`https://api.1inch.io/v5.0/1/approve/transaction?tokenAddress=${from.address}`)
   
         setTxDetails(approve.data);
         console.log("not approved")

@@ -61,26 +61,31 @@ export default function Main() {
 
     async function fetchDexSwap(){
 
-        const allowance = await axios.get(`https://api.1inch.io/v5.0/1/approve/allowance?tokenAddress=${fromCur.address}&walletAddress=${address}`)
-      
-        if(allowance.data.allowance === "0"){
-    
-          const approve = await axios.get(`https://api.1inch.io/v5.0/1/approve/transaction?tokenAddress=${fromCur.address}`)
-    
-          setTxDetails(approve.data);
-          console.log("not approved")
-          return
-    
+        const allowance = await axios.get('/api/proxy', {
+        params : {
+          realUrl : `/approve/allowance?tokenAddress=${fromCur.address}&walletAddress=0x61E55E8DFA3D177106C93b13174C0906A41741dB`,
         }
+      })
+      
+      console.log(allowance)
+        // if(allowance.data.allowance === "0"){
     
-        const tx = await axios.get(
-          `https://api.1inch.io/v5.0/1/swap?fromTokenAddress=${fromCur.address}&toTokenAddress=${toCur.address}&amount=${tokenOneAmount.padEnd(fromCur.decimals+tokenOneAmount.length, '0')}&fromAddress=${address}&slippage=${slippage}`
-        )
+        //   const approve = await axios.get(`/api/proxy/approve/transaction?tokenAddress=${fromCur.address}`)
     
-        let decimals = Number(`1E${toCur.decimals}`)
-        setTokenTwoAmount((Number(tx.data.toTokenAmount)/decimals).toFixed(2));
+        //   setTxDetails(approve.data);
+        //   console.log("not approved")
+        //   return
     
-        setTxDetails(tx.data.tx);
+        // }
+    
+        // const tx = await axios.get(
+        //   `/api/proxy/swap?fromTokenAddress=${fromCur.address}&toTokenAddress=${toCur.address}&amount=${tokenOneAmount.padEnd(fromCur.decimals+tokenOneAmount.length, '0')}&fromAddress=${address}&slippage=${slippage}`
+        // )
+    
+        // let decimals = Number(`1E${toCur.decimals}`)
+        // setTokenTwoAmount((Number(tx.data.toTokenAmount)/decimals).toFixed(2));
+    
+        // setTxDetails(tx.data.tx);
       
       }
 
@@ -258,13 +263,17 @@ export default function Main() {
          </div>
       
       
-            {!isConnected ? (
+            {/* {!isConnected ? (
             <div className="w-full flex items-center justify-center">
                 <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label="Connect to a wallet" />
             </div>) :
 
             (<button disabled={!tokenOneAmount || slippage <= 0 || slippage > 5} className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount ? 'cursor-not-allowed' : 'cursor-pointer'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
-    )}
+    )} */}
+
+    
+<button  className={`text-white px-4 py-2 w-[50%] mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
+  
          </>
         )}
 

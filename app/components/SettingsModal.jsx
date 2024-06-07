@@ -73,7 +73,7 @@ function Window(){
                 <p onClick={() => setSlippage(0.5)} className="flex items-center justify-center text-white text-xs font-semibold cursor-pointer min-w-[50px] h-[35px] transition-all duration-150 ease-in-out hover:border-gray-100 rounded-full bg-transparent border border-gray-300">0.5%</p>
                 <p onClick={() => setSlippage(1)} className="flex items-center justify-center text-white text-xs font-semibold cursor-pointer min-w-[50px] h-[35px] transition-all duration-150 ease-in-out hover:border-gray-100 rounded-full bg-transparent border border-gray-300">1%</p>
                 <div className="flex relative flex-grow pl-8 sm:pl-20 border w-[100px] h-[35px] rounded-full border-purple-600 hover:border-gray-300 transition ease-in-out duration-150">
-                    <BiSolidError className="text-[16px] absolute left-3 top-[50%] -translate-y-1/2 text-amber-600" />
+                    {+slippage === 0 && <BiSolidError className="text-[16px] absolute left-3 top-[50%] -translate-y-1/2 text-amber-600" />}
                     <input onChange={e => setSlippage(e.target.value)} type="text" className="outline-none w-full border-none bg-transparent text-white placeholder:text-gray-400" placeholder={`${slippage}%`} />
                 </div>
             </div>
