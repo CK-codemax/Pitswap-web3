@@ -60,52 +60,76 @@ export default function Main() {
     }
 
     async function fetchDexSwap(){
+      try{
+        const allowance = await axios.get(
+          `https://dex-ztgo.onrender.com/swap/v5.2/1/approve/allowance?tokenAddress=${fromCur.address}&walletAddress=${address}`
+        );
+        console.log(allowance);
 
-      //   const allowance = await axios.get('/api/proxy', {
-      //   params : {
-      //     realUrl : `/approve/allowance?tokenAddress=${fromCur.address}&walletAddress=${address}`,
-      //   }
-      // })
-
-      const allowance = await axios.get(
-        '/api/swap', {
-          params : {
-            realUrl : `/v5.2/1/approve/allowance?tokenAddress=${fromCur.address}&walletAddress=${address}`,
-          }
-        }
-      );
-      
-      console.log(allowance)
-        if(allowance.data.allowance === "0"){
-    
-          // const approve = await axios.get(`/api/proxy/approve/transaction?tokenAddress=${fromCur.address}`)
-          const approve = await axios.get('/api/swap', {
-            params : {
-              realUrl : `/approve/transaction?tokenAddress=${fromCur.address}`,
-            }
-          })
-    
+        if (allowance.data.allowance === "0") {
+          const approve = await axios.get(
+            `https://dex-ztgo.onrender.com/swap/v5.2/1/approve/transaction?tokenAddress=${fromCur.address}`
+          );
           setTxDetails(approve.data);
-          console.log("not approved")
-          return
-    
+          console.log(approve.data);
+          // console.log("not approved");
+          return;
         }
-    
+        console.log("make swap");
         const tx = await axios.get(
-          '/api/swap', {
-            params : {
-              realUrl : `/swap?fromTokenAddress=${fromCur.address}&toTokenAddress=${toCur.address}&amount=${tokenOneAmount.padEnd(fromCur.decimals+tokenOneAmount.length, '0')}&fromAddress=${address}&slippage=${slippage}`,
-            }
-          }
-        )
-        // const tx = await axios.get(
-        //   `/api/proxy/swap?fromTokenAddress=${fromCur.address}&toTokenAddress=${toCur.address}&amount=${tokenOneAmount.padEnd(fromCur.decimals+tokenOneAmount.length, '0')}&fromAddress=${address}&slippage=${slippage}`
-        // )
-    
-        let decimals = Number(`1E${toCur.decimals}`)
-        setTokenTwoAmount((Number(tx.data.toTokenAmount)/decimals).toFixed(2));
-    
+          `https://dex-ztgo.onrender.com/swap/v5.2/1/swap?src=${
+            fromCur.address
+          }&dst=${toCur.address}&amount=${tokenOneAmount.padEnd(
+            fromCur.decimals + tokenOneAmount.length,
+            "0"
+          )}&address=${address}&slippage=${slippage}`
+        );
+        let decimals = Number(`1E${toCur.decimals}`);
+        setTokenTwoAmount((Number(tx.data.toTokenAmount) / decimals).toFixed(2));
+  
         setTxDetails(tx.data.tx);
+        console.log(tx.data.tx);
+
+      }catch (error) {
+      console.log(error);
+    }
+      
+      }
+
+    async function fetchDexSwapTest(){
+      try{
+        const allowance = await axios.get(
+          `https://dex-ztgo.onrender.com/swap/v5.2/1/approve/allowance?tokenAddress=${fromCur.address}&walletAddress=0x61E55E8DFA3D177106C93b13174C0906A41741dB`
+        );
+        console.log(allowance);
+
+        if (allowance.data.allowance === "0") {
+          const approve = await axios.get(
+            `https://dex-ztgo.onrender.com/swap/v5.2/1/approve/transaction?tokenAddress=${fromCur.address}`
+          );
+          setTxDetails(approve.data);
+          console.log(approve.data);
+          // console.log("not approved");
+          return;
+        }
+        console.log("make swap");
+        const tx = await axios.get(
+          `https://dex-ztgo.onrender.com/swap/v5.2/1/swap?src=${
+            fromCur.address
+          }&dst=${toCur.address}&amount=${tokenOneAmount.padEnd(
+            fromCur.decimals + tokenOneAmount.length,
+            "0"
+          )}&address=${address}&slippage=${slippage}`
+        );
+        let decimals = Number(`1E${toCur.decimals}`);
+        setTokenTwoAmount((Number(tx.data.toTokenAmount) / decimals).toFixed(2));
+  
+        setTxDetails(tx.data.tx);
+        console.log(tx.data.tx);
+
+      }catch (error) {
+      console.log(error);
+    }
       
       }
 
@@ -290,7 +314,7 @@ export default function Main() {
 
             (<button disabled={!tokenOneAmount || slippage <= 0 || slippage > 5} className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount ? 'cursor-not-allowed' : 'cursor-pointer'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
     )}
-            {/* <button  className={`text-white px-4 py-2 w-[50%] mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button> */}
+            <button  className={`text-white px-4 py-2 w-[50%] mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwapTest}>Swap</button>
          </>
         )}
 

@@ -6,7 +6,7 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 
 function createDynamicProxyMiddleware(targetUrl) {
 return proxyMiddleware = createProxyMiddleware({
-    target: "https://api.1inch.dev",
+    target: targetUrl,
     changeOrigin: true,
     onProxyReq: (proxyReq) => {
       // add API key in Header
