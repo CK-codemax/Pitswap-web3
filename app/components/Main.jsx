@@ -96,43 +96,6 @@ export default function Main() {
       
       }
 
-    async function fetchDexSwapTest(){
-      try{
-        const allowance = await axios.get(
-          `https://dex-ztgo.onrender.com/swap/v5.2/1/approve/allowance?tokenAddress=${fromCur.address}&walletAddress=0x61E55E8DFA3D177106C93b13174C0906A41741dB`
-        );
-        console.log(allowance);
-
-        if (allowance.data.allowance === "0") {
-          const approve = await axios.get(
-            `https://dex-ztgo.onrender.com/swap/v5.2/1/approve/transaction?tokenAddress=${fromCur.address}`
-          );
-          setTxDetails(approve.data);
-          console.log(approve.data);
-          // console.log("not approved");
-          return;
-        }
-        console.log("make swap");
-        const tx = await axios.get(
-          `https://dex-ztgo.onrender.com/swap/v5.2/1/swap?src=${
-            fromCur.address
-          }&dst=${toCur.address}&amount=${tokenOneAmount.padEnd(
-            fromCur.decimals + tokenOneAmount.length,
-            "0"
-          )}&address=${address}&slippage=${slippage}`
-        );
-        let decimals = Number(`1E${toCur.decimals}`);
-        setTokenTwoAmount((Number(tx.data.toTokenAmount) / decimals).toFixed(2));
-  
-        setTxDetails(tx.data.tx);
-        console.log(tx.data.tx);
-
-      }catch (error) {
-      console.log(error);
-    }
-      
-      }
-
     function switchCurrencies(){
         setPrices(null);
         setTokenOneAmount('');
@@ -309,13 +272,12 @@ export default function Main() {
       
             {!isConnected ? (
             <div className="w-full flex items-center justify-center">
-                <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label="Connect to a wallet" />
+                <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label={!isConnected ? 'Connect to a wallet' : 'Disconnect'} />
             </div>) :
 
             (<button disabled={!tokenOneAmount || slippage <= 0 || slippage > 5} className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount ? 'cursor-not-allowed' : 'cursor-pointer'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>
     )}
-            <button  className={`text-white px-4 py-2 w-[50%] mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwapTest}>Swap</button>
-         </>
+    </>
         )}
 
         {

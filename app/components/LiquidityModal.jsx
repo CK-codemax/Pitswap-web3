@@ -246,7 +246,7 @@ function changeCurTwo(type){
   
          {!isConnected ? (
             <div className="w-full flex items-center justify-center">
-                <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label="Connect to a wallet" />
+                <w3m-connect-button className="w-full block mt-6 py-4 rounded-xl text-xl bg-purple-600 font-semibold  text-white mx-auto transition-colors duration-300 ease-in-out hover:bg-purple-700" size="md" label={!isConnected ? 'Connect to a wallet' : 'Disconnect'} />
             </div>) :
 
             (<button disabled={!tokenOneAmount} className={`text-white px-4 py-2 w-[50%] ${!tokenOneAmount ? 'cursor-not-allowed' : 'cursor-pointer'} mx-auto rounded-full bg-gray-700 cursor-pointer`} onClick={fetchDexSwap}>Swap</button>

@@ -5,10 +5,12 @@ import { FaEllipsis } from "react-icons/fa6";
 import SettingsModal from "./SettingsModal";
 import MenuModal from "./MenuModal";
 import Link from "next/link";
+import { useAccount } from "wagmi";
 
 
 
 export default function Header() {
+    const { address, isConnected } = useAccount();
   return (
     <header className="fixed top-0 w-full flex justify-between items-start sm:items-center py-2 px-4">
         <Link href={'/'}>
@@ -17,7 +19,7 @@ export default function Header() {
 
         <div className="hidden sm:flex items-center space-x-3">
         <w3m-network-button />
-        <w3m-connect-button size="md" label="Connect to a wallet" />
+        <w3m-connect-button size="md" label={!isConnected ? 'Connect to a wallet' : 'Disconnect'} />
 
             <SettingsModal>
                 <SettingsModal.Open>
@@ -41,7 +43,7 @@ export default function Header() {
 
         <div className="flex sm:hidden flex-col items-end space-y-3">
          
-             <w3m-connect-button size="md" label="Connect to a wallet" />
+             <w3m-connect-button size="md" label={!isConnected ? 'Connect to a wallet' : 'Disconnect'} />
            <div className="flex items-center space-x-3 justify-end">
            <SettingsModal>
                 <SettingsModal.Open>
